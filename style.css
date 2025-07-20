@@ -12,6 +12,171 @@ body {
     align-items: center;
     justify-content: center;
     padding: 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Animated Background Elements */
+.background-animation {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: -1;
+}
+
+.floating-shapes {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.shape {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    animation: float 6s ease-in-out infinite;
+}
+
+.shape:nth-child(1) {
+    width: 80px;
+    height: 80px;
+    top: 20%;
+    left: 10%;
+    animation-delay: 0s;
+    animation-duration: 8s;
+}
+
+.shape:nth-child(2) {
+    width: 60px;
+    height: 60px;
+    top: 60%;
+    left: 80%;
+    animation-delay: 2s;
+    animation-duration: 10s;
+}
+
+.shape:nth-child(3) {
+    width: 100px;
+    height: 100px;
+    top: 80%;
+    left: 20%;
+    animation-delay: 4s;
+    animation-duration: 12s;
+}
+
+.shape:nth-child(4) {
+    width: 40px;
+    height: 40px;
+    top: 10%;
+    left: 70%;
+    animation-delay: 1s;
+    animation-duration: 9s;
+}
+
+.shape:nth-child(5) {
+    width: 70px;
+    height: 70px;
+    top: 40%;
+    left: 5%;
+    animation-delay: 3s;
+    animation-duration: 11s;
+}
+
+.shape:nth-child(6) {
+    width: 50px;
+    height: 50px;
+    top: 30%;
+    left: 90%;
+    animation-delay: 5s;
+    animation-duration: 7s;
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0px) rotate(0deg);
+        opacity: 0.3;
+    }
+    50% {
+        transform: translateY(-20px) rotate(180deg);
+        opacity: 0.6;
+    }
+}
+
+.particles {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 50%;
+    animation: twinkle 3s ease-in-out infinite;
+}
+
+.particle:nth-child(1) {
+    top: 15%;
+    left: 25%;
+    animation-delay: 0s;
+}
+
+.particle:nth-child(2) {
+    top: 75%;
+    left: 60%;
+    animation-delay: 1s;
+}
+
+.particle:nth-child(3) {
+    top: 45%;
+    left: 85%;
+    animation-delay: 2s;
+}
+
+.particle:nth-child(4) {
+    top: 25%;
+    left: 75%;
+    animation-delay: 0.5s;
+}
+
+.particle:nth-child(5) {
+    top: 85%;
+    left: 15%;
+    animation-delay: 1.5s;
+}
+
+.particle:nth-child(6) {
+    top: 55%;
+    left: 35%;
+    animation-delay: 2.5s;
+}
+
+.particle:nth-child(7) {
+    top: 10%;
+    left: 50%;
+    animation-delay: 3s;
+}
+
+.particle:nth-child(8) {
+    top: 70%;
+    left: 90%;
+    animation-delay: 0.8s;
+}
+
+@keyframes twinkle {
+    0%, 100% {
+        opacity: 0.3;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.5);
+    }
 }
 
 .container {
@@ -86,6 +251,32 @@ body {
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.2);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.game-board::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+    animation: shimmer 4s ease-in-out infinite;
+    pointer-events: none;
+}
+
+@keyframes shimmer {
+    0% {
+        transform: translateX(-100%) translateY(-100%) rotate(45deg);
+    }
+    50% {
+        transform: translateX(0%) translateY(0%) rotate(45deg);
+    }
+    100% {
+        transform: translateX(100%) translateY(100%) rotate(45deg);
+    }
 }
 
 .card {
@@ -154,6 +345,119 @@ body {
 
 .card:hover:not(.flip):not(.matched) .card-face {
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Celebration Animation for Matched Cards */
+.card.match-celebration {
+    animation: celebrate 0.8s ease-in-out;
+}
+
+@keyframes celebrate {
+    0% {
+        transform: scale(1);
+    }
+    25% {
+        transform: scale(1.15) rotate(5deg);
+    }
+    50% {
+        transform: scale(1.1) rotate(-5deg);
+    }
+    75% {
+        transform: scale(1.05) rotate(2deg);
+    }
+    100% {
+        transform: scale(1) rotate(0deg);
+    }
+}
+
+/* Pulse animation for game stats when updated */
+.stat.pulse {
+    animation: statPulse 0.5s ease-in-out;
+}
+
+@keyframes statPulse {
+    0% {
+        transform: scale(1);
+        background: rgba(255, 255, 255, 0.2);
+    }
+    50% {
+        transform: scale(1.05);
+        background: rgba(255, 255, 255, 0.4);
+    }
+    100% {
+        transform: scale(1);
+        background: rgba(255, 255, 255, 0.2);
+    }
+}
+
+/* Enhanced game header with subtle animation */
+.game-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    animation: titleGlow 3s ease-in-out infinite;
+}
+
+@keyframes titleGlow {
+    0%, 100% {
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+    50% {
+        text-shadow: 2px 2px 8px rgba(255,255,255,0.3), 0 0 20px rgba(255,255,255,0.2);
+    }
+}
+
+/* Card entrance animation */
+.card.entrance {
+    animation: cardEntrance 0.6s ease-out forwards;
+    opacity: 0;
+    transform: scale(0.8) translateY(20px);
+}
+
+@keyframes cardEntrance {
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+/* Victory confetti effect */
+.confetti {
+    position: fixed;
+    width: 10px;
+    height: 10px;
+    z-index: 1001;
+    pointer-events: none;
+}
+
+.confetti:before {
+    content: '';
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: #ff6b6b;
+    animation: confettiFall 3s linear infinite;
+}
+
+.confetti:nth-child(odd):before {
+    background: #4ecdc4;
+    animation-delay: 0.5s;
+}
+
+.confetti:nth-child(even):before {
+    background: #45b7d1;
+    animation-delay: 1s;
+}
+
+@keyframes confettiFall {
+    0% {
+        transform: translateY(-100vh) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(100vh) rotate(720deg);
+        opacity: 0;
+    }
 }
 
 /* Modal Styles */

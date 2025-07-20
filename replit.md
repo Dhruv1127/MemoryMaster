@@ -39,9 +39,12 @@ Preferred communication style: Simple, everyday language.
 
 ### Styling (`style.css`)
 - **Modern Design**: Gradient backgrounds and glassmorphism effects
-- **Card Animations**: Flip transitions and hover effects
+- **Animated Background**: Floating shapes and twinkling particles for ambient atmosphere
+- **Card Animations**: 3D flip transitions, entrance animations, and celebration effects
+- **UI Enhancements**: Glowing title, stat pulse animations, and shimmer effects
 - **Responsive Grid**: CSS Grid layout for card arrangement
-- **Visual Feedback**: Color coding for different card states
+- **Visual Feedback**: Color coding for different card states and match celebrations
+- **Victory Effects**: Confetti animation system for game completion
 
 ## Data Flow
 

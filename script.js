@@ -72,7 +72,7 @@ class MemoryGame {
         
         this.cards.forEach((card, index) => {
             const cardElement = document.createElement('div');
-            cardElement.className = 'card';
+            cardElement.className = 'card entrance';
             cardElement.dataset.cardId = card.id;
             cardElement.dataset.symbol = card.symbol;
             
@@ -83,11 +83,21 @@ class MemoryGame {
                 </div>
             `;
             
+            // Add entrance animation delay for each card
+            cardElement.style.animationDelay = `${index * 0.1}s`;
+            
             this.gameBoard.appendChild(cardElement);
         });
 
         // Initialize Feather icons
         feather.replace();
+        
+        // Remove entrance class after animation completes
+        setTimeout(() => {
+            document.querySelectorAll('.card.entrance').forEach(card => {
+                card.classList.remove('entrance');
+            });
+        }, 1600);
     }
 
     bindEvents() {
@@ -146,6 +156,7 @@ class MemoryGame {
         if (this.flippedCards.length === 2) {
             this.tries++;
             this.updateUI();
+            this.animateStatUpdate('tries');
             setTimeout(() => {
                 this.checkMatch();
             }, 1000);
@@ -178,9 +189,17 @@ class MemoryGame {
     }
 
     handleMatch(card1, card2) {
-        // Mark cards as matched
-        card1.classList.add('matched');
-        card2.classList.add('matched');
+        // Add celebration animation
+        card1.classList.add('match-celebration');
+        card2.classList.add('match-celebration');
+        
+        // Mark cards as matched after celebration
+        setTimeout(() => {
+            card1.classList.add('matched');
+            card2.classList.add('matched');
+            card1.classList.remove('match-celebration');
+            card2.classList.remove('match-celebration');
+        }, 800);
         
         // Add to matched cards array
         this.matchedCards.push(card1, card2);
@@ -188,6 +207,7 @@ class MemoryGame {
         // Update matches count
         this.matches++;
         this.updateUI();
+        this.animateStatUpdate('matches');
 
         // Check if game is completed
         if (this.matches === this.cardSymbols.length) {
@@ -230,6 +250,9 @@ class MemoryGame {
     completeGame() {
         this.gameCompleted = true;
         this.stopTimer();
+        
+        // Create confetti effect
+        this.createConfetti();
         
         // Show victory modal after a short delay
         setTimeout(() => {
@@ -278,6 +301,46 @@ class MemoryGame {
     updateUI() {
         this.triesElement.textContent = this.tries;
         this.matchesElement.textContent = `${this.matches}/${this.cardSymbols.length}`;
+    }
+
+    animateStatUpdate(statType) {
+        let element;
+        if (statType === 'tries') {
+            element = this.triesElement.closest('.stat');
+        } else if (statType === 'matches') {
+            element = this.matchesElement.closest('.stat');
+        }
+        
+        if (element) {
+            element.classList.add('pulse');
+            setTimeout(() => {
+                element.classList.remove('pulse');
+            }, 500);
+        }
+    }
+
+    createConfetti() {
+        const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#f9ca24', '#f0932b'];
+        
+        for (let i = 0; i < 50; i++) {
+            setTimeout(() => {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.animationDelay = Math.random() * 3 + 's';
+                confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                
+                document.body.appendChild(confetti);
+                
+                // Remove confetti after animation
+                setTimeout(() => {
+                    if (confetti.parentNode) {
+                        confetti.parentNode.removeChild(confetti);
+                    }
+                }, 5000);
+            }, i * 100);
+        }
     }
 }
 
