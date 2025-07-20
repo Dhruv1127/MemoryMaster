@@ -171,9 +171,28 @@ class MemoryGame {
             this.showHowToPlayModal();
         });
 
-        // Quit game button (from start screen)
+        // Enhanced quit game button (from start screen)
         this.quitGameBtn.addEventListener('click', () => {
-            this.showQuitConfirmation();
+            // Play dramatic exit sound
+            this.playTone(400, 200, 0.15);
+            setTimeout(() => this.playTone(300, 300, 0.12), 200);
+            
+            // Add enhanced visual feedback to the button
+            const button = this.quitGameBtn;
+            const content = button.querySelector('.button-content');
+            const glow = button.querySelector('.button-glow');
+            
+            // Create ripple effect
+            button.style.transform = 'scale(0.95)';
+            glow.style.opacity = '1';
+            content.style.transform = 'scale(1.1)';
+            
+            setTimeout(() => {
+                button.style.transform = '';
+                content.style.transform = '';
+                glow.style.opacity = '';
+                this.showQuitConfirmation();
+            }, 200);
         });
 
         // Quit game button (from gameplay)

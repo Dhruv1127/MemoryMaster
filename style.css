@@ -379,16 +379,129 @@ body {
     transform: translateY(-3px);
 }
 
-.quit-game-btn {
-    background: rgba(255, 107, 107, 0.1);
-    color: white;
-    border: 2px solid rgba(255, 107, 107, 0.5);
+/* Secondary Actions Section */
+.secondary-actions {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+    animation: fadeIn 1s ease-out 2s both;
 }
 
-.quit-game-btn:hover {
-    background: rgba(255, 107, 107, 0.2);
-    border-color: rgba(255, 107, 107, 0.7);
-    transform: translateY(-3px);
+/* Enhanced Quit Button */
+.quit-game-btn.enhanced {
+    background: linear-gradient(135deg, rgba(255, 107, 107, 0.1) 0%, rgba(220, 53, 69, 0.1) 100%);
+    color: #ff6b6b;
+    border: 2px solid rgba(255, 107, 107, 0.3);
+    padding: 12px 25px;
+    border-radius: 50px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    backdrop-filter: blur(10px);
+    position: relative;
+    overflow: hidden;
+    min-width: 140px;
+    justify-content: center;
+}
+
+.quit-game-btn.enhanced .button-content {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+    z-index: 2;
+}
+
+.quit-game-btn.enhanced .button-glow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(255, 107, 107, 0.3) 0%, rgba(220, 53, 69, 0.3) 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    border-radius: 50px;
+}
+
+.quit-game-btn.enhanced::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 107, 107, 0.4), transparent);
+    transition: left 0.6s ease;
+}
+
+.quit-game-btn.enhanced:hover::before {
+    left: 100%;
+}
+
+.quit-game-btn.enhanced:hover {
+    background: linear-gradient(135deg, rgba(255, 107, 107, 0.2) 0%, rgba(220, 53, 69, 0.2) 100%);
+    border-color: rgba(255, 107, 107, 0.6);
+    transform: translateY(-4px) scale(1.05);
+    box-shadow: 0 12px 30px rgba(255, 107, 107, 0.4);
+}
+
+.quit-game-btn.enhanced:hover .button-glow {
+    opacity: 1;
+}
+
+.quit-game-btn.enhanced:active {
+    transform: translateY(-2px) scale(1.02);
+    transition: all 0.1s ease;
+}
+
+/* Subtle animation for the quit button icon */
+.quit-game-btn.enhanced:hover svg {
+    animation: quitIconSpin 0.6s ease-in-out;
+}
+
+@keyframes quitIconSpin {
+    0% { transform: rotate(0deg); }
+    50% { transform: rotate(180deg) scale(1.1); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Add floating particles effect on quit button hover */
+.quit-game-btn.enhanced:hover::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 4px;
+    height: 4px;
+    background: rgba(255, 107, 107, 0.8);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 
+        0 0 0 8px rgba(255, 107, 107, 0.3),
+        0 0 0 16px rgba(255, 107, 107, 0.1),
+        0 0 0 24px rgba(255, 107, 107, 0.05);
+    animation: quitParticleExplosion 1.2s ease-out infinite;
+    pointer-events: none;
+}
+
+@keyframes quitParticleExplosion {
+    0% {
+        transform: translate(-50%, -50%) scale(0);
+        opacity: 1;
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 0.8;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(3);
+        opacity: 0;
+    }
 }
 
 .game-features {
@@ -1093,6 +1206,22 @@ body {
     stroke-width: 2;
     z-index: 1;
     position: relative;
+    animation: quitIconWarning 1.5s ease-in-out infinite;
+}
+
+@keyframes quitIconWarning {
+    0%, 100% {
+        transform: scale(1) rotate(0deg);
+    }
+    25% {
+        transform: scale(1.1) rotate(-5deg);
+    }
+    50% {
+        transform: scale(1.05) rotate(0deg);
+    }
+    75% {
+        transform: scale(1.1) rotate(5deg);
+    }
 }
 
 .quit-confirmation-content h2 {
@@ -1306,6 +1435,16 @@ body {
         width: 100%;
         max-width: 250px;
         justify-content: center;
+    }
+    
+    .secondary-actions {
+        margin-top: 20px;
+    }
+    
+    .quit-game-btn.enhanced {
+        padding: 10px 20px;
+        font-size: 0.9rem;
+        min-width: 120px;
     }
     
     .game-features {
