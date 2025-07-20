@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memory Matching Game</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Feather Icons for card symbols -->
+    <script src="https://unpkg.com/feather-icons"></script>
+</head>
+<body>
+    <div class="container">
+        <header class="game-header">
+            <h1>Memory Matching Game</h1>
+            <div class="game-stats">
+                <div class="stat">
+                    <span class="label">Time:</span>
+                    <span id="timer">00:00</span>
+                </div>
+                <div class="stat">
+                    <span class="label">Tries:</span>
+                    <span id="tries">0</span>
+                </div>
+                <div class="stat">
+                    <span class="label">Matches:</span>
+                    <span id="matches">0/8</span>
+                </div>
+            </div>
+            <button id="restart-btn" class="restart-btn">Restart Game</button>
+        </header>
+
+        <main class="game-container">
+            <div class="game-board" id="game-board">
+                <!-- Cards will be dynamically generated here -->
+            </div>
+        </main>
+
+        <!-- Victory Modal -->
+        <div id="victory-modal" class="modal hidden">
+            <div class="modal-content">
+                <h2>🎉 Congratulations!</h2>
+                <p>You won the game!</p>
+                <div class="victory-stats">
+                    <div>Time: <span id="final-time"></span></div>
+                    <div>Tries: <span id="final-tries"></span></div>
+                </div>
+                <button id="play-again-btn" class="play-again-btn">Play Again</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
