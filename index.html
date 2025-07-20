@@ -31,31 +31,137 @@
         </div>
     </div>
 
-    <div class="container">
-        <header class="game-header">
-            <h1>Memory Matching Game</h1>
-            <div class="game-stats">
-                <div class="stat">
-                    <span class="label">Time:</span>
-                    <span id="timer">00:00</span>
+    <!-- Start Screen -->
+    <div id="start-screen" class="start-screen">
+        <div class="start-content">
+            <div class="logo-container">
+                <div class="logo-icon">
+                    <i data-feather="zap"></i>
                 </div>
-                <div class="stat">
-                    <span class="label">Tries:</span>
-                    <span id="tries">0</span>
-                </div>
-                <div class="stat">
-                    <span class="label">Matches:</span>
-                    <span id="matches">0/8</span>
+                <h1 class="start-title">Memory Master</h1>
+                <p class="start-subtitle">Challenge your brain with this classic card matching game</p>
+            </div>
+            
+            <div class="difficulty-selector">
+                <h3>Choose Difficulty</h3>
+                <div class="difficulty-options">
+                    <button class="difficulty-btn active" data-difficulty="easy">
+                        <i data-feather="smile"></i>
+                        <span>Easy</span>
+                        <small>4x4 Grid</small>
+                    </button>
+                    <button class="difficulty-btn" data-difficulty="medium">
+                        <i data-feather="trending-up"></i>
+                        <span>Medium</span>
+                        <small>4x5 Grid</small>
+                    </button>
+                    <button class="difficulty-btn" data-difficulty="hard">
+                        <i data-feather="target"></i>
+                        <span>Hard</span>
+                        <small>5x6 Grid</small>
+                    </button>
                 </div>
             </div>
-            <button id="restart-btn" class="restart-btn">Restart Game</button>
-        </header>
+            
+            <div class="start-actions">
+                <button id="start-game-btn" class="start-game-btn">
+                    <i data-feather="play"></i>
+                    Start Playing
+                </button>
+                <button id="how-to-play-btn" class="how-to-play-btn">
+                    <i data-feather="help-circle"></i>
+                    How to Play
+                </button>
+            </div>
+            
+            <div class="game-features">
+                <div class="feature">
+                    <i data-feather="clock"></i>
+                    <span>Timer Challenge</span>
+                </div>
+                <div class="feature">
+                    <i data-feather="target"></i>
+                    <span>Score Tracking</span>
+                </div>
+                <div class="feature">
+                    <i data-feather="award"></i>
+                    <span>Achievements</span>
+                </div>
+            </div>
+        </div>
+    </div>
 
-        <main class="game-container">
-            <div class="game-board" id="game-board">
-                <!-- Cards will be dynamically generated here -->
+    <!-- Game Screen -->
+    <div id="game-screen" class="game-screen hidden">
+        <div class="container">
+            <header class="game-header">
+                <div class="game-title-section">
+                    <h1>Memory Matching Game</h1>
+                    <button id="back-to-menu-btn" class="back-btn">
+                        <i data-feather="arrow-left"></i>
+                        Menu
+                    </button>
+                </div>
+                <div class="game-stats">
+                    <div class="stat">
+                        <span class="label">Time:</span>
+                        <span id="timer">00:00</span>
+                    </div>
+                    <div class="stat">
+                        <span class="label">Tries:</span>
+                        <span id="tries">0</span>
+                    </div>
+                    <div class="stat">
+                        <span class="label">Matches:</span>
+                        <span id="matches">0/8</span>
+                    </div>
+                </div>
+                <button id="restart-btn" class="restart-btn">Restart Game</button>
+            </header>
+
+            <main class="game-container">
+                <div class="game-board" id="game-board">
+                    <!-- Cards will be dynamically generated here -->
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- How to Play Modal -->
+    <div id="how-to-play-modal" class="modal hidden">
+        <div class="modal-content how-to-play-content">
+            <div class="modal-header">
+                <h2><i data-feather="help-circle"></i> How to Play</h2>
+                <button id="close-help-btn" class="close-btn">
+                    <i data-feather="x"></i>
+                </button>
             </div>
-        </main>
+            <div class="instructions">
+                <div class="instruction-step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h4>Click on Cards</h4>
+                        <p>Click on any card to flip it and reveal the hidden symbol</p>
+                    </div>
+                </div>
+                <div class="instruction-step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h4>Find Matches</h4>
+                        <p>Click on a second card to try to find a matching symbol</p>
+                    </div>
+                </div>
+                <div class="instruction-step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h4>Clear the Board</h4>
+                        <p>Match all pairs as quickly as possible to win the game</p>
+                    </div>
+                </div>
+            </div>
+            <button id="got-it-btn" class="got-it-btn">Got it!</button>
+        </div>
+    </div>
 
         <!-- Victory Modal -->
         <div id="victory-modal" class="modal hidden">

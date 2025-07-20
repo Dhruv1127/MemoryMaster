@@ -25,16 +25,21 @@ Preferred communication style: Simple, everyday language.
 
 ### Core Game Logic (`script.js`)
 - **MemoryGame Class**: Main game controller handling:
-  - Card creation and shuffling
+  - Multi-screen navigation (start screen ↔ game screen)
+  - Difficulty system with dynamic grid layouts
+  - Card creation and shuffling based on difficulty
   - Game state management (flipped cards, matches, tries)
   - Timer functionality
   - Victory condition detection
   - UI updates and event handling
+  - Tutorial modal system
 
 ### User Interface (`index.html`)
-- **Game Header**: Title, statistics display, and restart button
-- **Game Board**: Dynamic 4x4 grid for card layout
+- **Start Screen**: Welcome screen with game logo, difficulty selection, and how-to-play instructions
+- **Game Header**: Title, statistics display, restart button, and back-to-menu navigation
+- **Game Board**: Dynamic grid layout that adapts to difficulty (4x4, 4x5, 5x6)
 - **Victory Modal**: Popup displaying final game statistics
+- **How-to-Play Modal**: Interactive tutorial with step-by-step instructions
 - **Responsive Layout**: Adaptive design for different screen sizes
 
 ### Styling (`style.css`)

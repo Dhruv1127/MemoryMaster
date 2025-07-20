@@ -10,37 +10,57 @@ class MemoryGame {
         this.gameCompleted = false;
         this.startTime = null;
         this.timerInterval = null;
+        this.currentDifficulty = 'easy';
+        this.gridConfig = {
+            easy: { rows: 4, cols: 4, pairs: 8 },
+            medium: { rows: 4, cols: 5, pairs: 10 },
+            hard: { rows: 5, cols: 6, pairs: 15 }
+        };
 
         // Card symbols using Feather icons
-        this.cardSymbols = [
-            'heart', 'star', 'sun', 'moon',
-            'cloud', 'umbrella', 'camera', 'music'
+        this.allCardSymbols = [
+            'heart', 'star', 'sun', 'moon', 'cloud', 'umbrella', 'camera', 'music',
+            'gift', 'coffee', 'home', 'bell', 'book', 'globe', 'key', 'lock',
+            'mail', 'phone', 'shield', 'user', 'watch', 'wifi', 'zap', 'anchor'
         ];
 
         // DOM elements
+        this.startScreen = document.getElementById('start-screen');
+        this.gameScreen = document.getElementById('game-screen');
         this.gameBoard = document.getElementById('game-board');
         this.timerElement = document.getElementById('timer');
         this.triesElement = document.getElementById('tries');
         this.matchesElement = document.getElementById('matches');
         this.restartBtn = document.getElementById('restart-btn');
+        this.backBtn = document.getElementById('back-to-menu-btn');
         this.victoryModal = document.getElementById('victory-modal');
         this.finalTimeElement = document.getElementById('final-time');
         this.finalTriesElement = document.getElementById('final-tries');
         this.playAgainBtn = document.getElementById('play-again-btn');
+        this.startGameBtn = document.getElementById('start-game-btn');
+        this.howToPlayBtn = document.getElementById('how-to-play-btn');
+        this.howToPlayModal = document.getElementById('how-to-play-modal');
+        this.closeHelpBtn = document.getElementById('close-help-btn');
+        this.gotItBtn = document.getElementById('got-it-btn');
 
         this.init();
     }
 
     init() {
-        this.createCards();
-        this.shuffleCards();
-        this.renderCards();
-        this.bindEvents();
-        this.updateUI();
+        this.bindStartScreenEvents();
+        // Initialize Feather icons
+        feather.replace();
+        // Show start screen initially
+        this.showStartScreen();
     }
 
     createCards() {
         this.cards = [];
+        const config = this.gridConfig[this.currentDifficulty];
+        
+        // Select symbols based on difficulty
+        this.cardSymbols = this.allCardSymbols.slice(0, config.pairs);
+        
         // Create pairs of cards
         this.cardSymbols.forEach((symbol, index) => {
             // Create two cards with the same symbol
@@ -89,6 +109,10 @@ class MemoryGame {
             this.gameBoard.appendChild(cardElement);
         });
 
+        // Update grid layout based on difficulty
+        const config = this.gridConfig[this.currentDifficulty];
+        this.gameBoard.style.gridTemplateColumns = `repeat(${config.cols}, 1fr)`;
+        
         // Initialize Feather icons
         feather.replace();
         
@@ -100,7 +124,81 @@ class MemoryGame {
         }, 1600);
     }
 
-    bindEvents() {
+    showStartScreen() {
+        this.startScreen.classList.remove('hidden');
+        this.gameScreen.classList.add('hidden');
+    }
+
+    showGameScreen() {
+        this.startScreen.classList.add('hidden');
+        this.gameScreen.classList.remove('hidden');
+        // Initialize game after screen transition
+        setTimeout(() => {
+            this.startNewGame();
+        }, 400);
+    }
+
+    startNewGame() {
+        this.createCards();
+        this.shuffleCards();
+        this.renderCards();
+        this.bindGameEvents();
+        this.updateUI();
+    }
+
+    bindStartScreenEvents() {
+        // Difficulty selection
+        document.querySelectorAll('.difficulty-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.difficulty-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                this.currentDifficulty = btn.dataset.difficulty;
+            });
+        });
+
+        // Start game button
+        this.startGameBtn.addEventListener('click', () => {
+            this.showGameScreen();
+        });
+
+        // How to play button
+        this.howToPlayBtn.addEventListener('click', () => {
+            this.showHowToPlayModal();
+        });
+
+        // Back to menu button
+        this.backBtn.addEventListener('click', () => {
+            this.showStartScreen();
+            this.resetGame();
+        });
+
+        // How to play modal events
+        this.closeHelpBtn.addEventListener('click', () => {
+            this.hideHowToPlayModal();
+        });
+
+        this.gotItBtn.addEventListener('click', () => {
+            this.hideHowToPlayModal();
+        });
+
+        // Close modal on background click
+        this.howToPlayModal.addEventListener('click', (e) => {
+            if (e.target === this.howToPlayModal) {
+                this.hideHowToPlayModal();
+            }
+        });
+    }
+
+    showHowToPlayModal() {
+        this.howToPlayModal.classList.remove('hidden');
+        feather.replace();
+    }
+
+    hideHowToPlayModal() {
+        this.howToPlayModal.classList.add('hidden');
+    }
+
+    bindGameEvents() {
         // Card click events
         this.gameBoard.addEventListener('click', (e) => {
             const cardElement = e.target.closest('.card');
@@ -210,7 +308,8 @@ class MemoryGame {
         this.animateStatUpdate('matches');
 
         // Check if game is completed
-        if (this.matches === this.cardSymbols.length) {
+        const config = this.gridConfig[this.currentDifficulty];
+        if (this.matches === config.pairs) {
             this.completeGame();
         }
     }
@@ -271,6 +370,11 @@ class MemoryGame {
     }
 
     restartGame() {
+        this.resetGame();
+        this.startNewGame();
+    }
+
+    resetGame() {
         // Reset game state
         this.flippedCards = [];
         this.matchedCards = [];
@@ -286,21 +390,14 @@ class MemoryGame {
         // Reset timer display
         this.timerElement.textContent = '00:00';
 
-        // Recreate and shuffle cards
-        this.createCards();
-        this.shuffleCards();
-        this.renderCards();
-
-        // Update UI
-        this.updateUI();
-
         // Hide victory modal if shown
         this.hideVictoryModal();
     }
 
     updateUI() {
         this.triesElement.textContent = this.tries;
-        this.matchesElement.textContent = `${this.matches}/${this.cardSymbols.length}`;
+        const config = this.gridConfig[this.currentDifficulty];
+        this.matchesElement.textContent = `${this.matches}/${config.pairs}`;
     }
 
     animateStatUpdate(statType) {
