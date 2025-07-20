@@ -31,8 +31,8 @@ class MemoryGame {
         this.timerElement = document.getElementById('timer');
         this.triesElement = document.getElementById('tries');
         this.matchesElement = document.getElementById('matches');
-        this.restartBtn = document.getElementById('restart-btn');
-        this.backBtn = document.getElementById('back-to-menu-btn');
+        // Restart button is now in the navigation section
+        // Navigation buttons are now handled in the event listeners section
         this.victoryModal = document.getElementById('victory-modal');
         this.finalTimeElement = document.getElementById('final-time');
         this.finalTriesElement = document.getElementById('final-tries');
@@ -181,10 +181,18 @@ class MemoryGame {
             this.showQuitConfirmation();
         });
 
-        // Back to menu button
-        this.backBtn.addEventListener('click', () => {
+        // Navigation buttons during gameplay
+        this.homeBtn = document.getElementById('home-btn');
+        this.homeBtn.addEventListener('click', () => {
+            this.playTone(600, 150, 0.1);
             this.showStartScreen();
             this.resetGame();
+        });
+
+        this.restartGameBtn = document.getElementById('restart-game-btn');
+        this.restartGameBtn.addEventListener('click', () => {
+            this.playTone(800, 150, 0.1);
+            this.restartGame();
         });
 
         // How to play modal events
@@ -527,10 +535,7 @@ class MemoryGame {
             }
         });
 
-        // Restart button
-        this.restartBtn.addEventListener('click', () => {
-            this.restartGame();
-        });
+        // Restart functionality is now handled by the restart-game-btn in navigation
 
         // Play again button
         this.playAgainBtn.addEventListener('click', () => {
@@ -770,7 +775,7 @@ document.addEventListener('DOMContentLoaded', () => {
 document.addEventListener('keydown', (e) => {
     if (e.key === 'r' || e.key === 'R') {
         // Restart game with 'R' key
-        const restartBtn = document.getElementById('restart-btn');
+        const restartBtn = document.getElementById('restart-game-btn');
         if (restartBtn && !document.getElementById('game-screen').classList.contains('hidden')) {
             restartBtn.click();
         }
@@ -786,6 +791,12 @@ document.addEventListener('keydown', (e) => {
             howToPlayModal.classList.add('hidden');
         } else if (quitModal && !quitModal.classList.contains('hidden')) {
             quitModal.classList.add('hidden');
+        }
+    } else if ((e.key === 'm' || e.key === 'M') && e.ctrlKey) {
+        // Go to home/menu with Ctrl+M
+        const homeBtn = document.getElementById('home-btn');
+        if (homeBtn && !document.getElementById('game-screen').classList.contains('hidden')) {
+            homeBtn.click();
         }
     } else if (e.key === 'q' || e.key === 'Q') {
         // Quit game with 'Q' key
