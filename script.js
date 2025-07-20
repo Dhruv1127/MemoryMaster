@@ -209,6 +209,19 @@ class MemoryGame {
         });
 
         this.cancelQuitBtn.addEventListener('click', () => {
+            // Play happy "continue playing" sound
+            this.playTone(800, 100, 0.12); // Quick positive tone
+            setTimeout(() => this.playTone(1000, 100, 0.12), 100); // Second higher tone
+            
+            // Add a small celebration effect for choosing to continue
+            const cancelBtn = document.getElementById('cancel-quit-btn');
+            if (cancelBtn) {
+                cancelBtn.style.transform = 'scale(1.1)';
+                setTimeout(() => {
+                    cancelBtn.style.transform = '';
+                }, 200);
+            }
+            
             this.hideQuitConfirmation();
         });
 
@@ -231,7 +244,35 @@ class MemoryGame {
 
     showQuitConfirmation() {
         this.quitConfirmationModal.classList.remove('hidden');
+        
+        // Add subtle audio feedback (using Web Audio API for a gentle sound)
+        this.playTone(800, 150, 0.1); // Gentle notification tone
+        
         feather.replace();
+    }
+    
+    // Simple tone generator for UI feedback
+    playTone(frequency, duration, volume = 0.1) {
+        try {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
+            oscillator.type = 'sine';
+            
+            gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+            gainNode.gain.linearRampToValueAtTime(volume, audioContext.currentTime + 0.01);
+            gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + duration / 1000);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + duration / 1000);
+        } catch (e) {
+            // Audio context not supported, silently fail
+        }
     }
 
     hideQuitConfirmation() {
@@ -239,6 +280,9 @@ class MemoryGame {
     }
 
     confirmQuit() {
+        // Play goodbye sound
+        this.playTone(400, 300, 0.15); // Lower tone for goodbye
+        
         // Hide the confirmation modal
         this.hideQuitConfirmation();
         
@@ -263,25 +307,153 @@ class MemoryGame {
             align-items: center;
             justify-content: center;
             z-index: 9999;
-            animation: fadeIn 0.5s ease-in-out;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
         `;
         
+        // Add floating particles animation
+        const particlesHtml = Array.from({length: 15}, (_, i) => 
+            `<div style="
+                position: absolute;
+                width: 8px;
+                height: 8px;
+                background: rgba(255, 255, 255, 0.8);
+                border-radius: 50%;
+                top: ${Math.random() * 100}%;
+                left: ${Math.random() * 100}%;
+                animation: twinkle ${2 + Math.random() * 3}s ease-in-out infinite ${Math.random() * 2}s;
+            "></div>`
+        ).join('');
+        
         farewellOverlay.innerHTML = `
-            <div style="text-align: center; color: white; animation: slideInUp 0.8s ease-out;">
-                <div style="font-size: 4rem; margin-bottom: 20px;">👋</div>
-                <h1 style="font-size: 2.5rem; margin-bottom: 20px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">
+            ${particlesHtml}
+            <div class="farewell-content" style="
+                text-align: center; 
+                color: white; 
+                transform: translateY(30px);
+                opacity: 0;
+                transition: all 0.8s ease-out;
+                max-width: 600px;
+                padding: 40px;
+                background: rgba(255, 255, 255, 0.1);
+                border-radius: 20px;
+                backdrop-filter: blur(10px);
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            ">
+                <div class="farewell-icon" style="
+                    width: 100px;
+                    height: 100px;
+                    background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    margin: 0 auto 30px;
+                    font-size: 4rem;
+                    box-shadow: 0 15px 40px rgba(76, 175, 80, 0.4);
+                    position: relative;
+                    animation: farewell-pulse 2s ease-in-out infinite;
+                ">
+                    <div style="
+                        position: absolute;
+                        width: 100%;
+                        height: 100%;
+                        border-radius: 50%;
+                        background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+                        opacity: 0.3;
+                        animation: farewell-ripple 2s ease-out infinite;
+                    "></div>
+                    <span style="position: relative; z-index: 1;">👋</span>
+                </div>
+                <h1 style="
+                    font-size: 3rem; 
+                    margin-bottom: 20px; 
+                    text-shadow: 2px 2px 8px rgba(0,0,0,0.3);
+                    background: linear-gradient(45deg, #fff, #e0e7ff);
+                    background-clip: text;
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                    font-weight: 700;
+                    animation: farewell-glow 3s ease-in-out infinite;
+                ">
                     Thanks for Playing!
                 </h1>
-                <p style="font-size: 1.2rem; opacity: 0.9; margin-bottom: 30px;">
-                    Hope you enjoyed the Memory Master game
+                <p style="
+                    font-size: 1.3rem; 
+                    opacity: 0.9; 
+                    margin-bottom: 30px;
+                    line-height: 1.6;
+                ">
+                    Hope you enjoyed the Memory Master game ✨
                 </p>
-                <p style="font-size: 1rem; opacity: 0.7;">
-                    This window will close automatically in 3 seconds...
-                </p>
+                <div class="countdown-container" style="
+                    background: rgba(255, 255, 255, 0.1);
+                    padding: 15px 25px;
+                    border-radius: 50px;
+                    margin-bottom: 20px;
+                    border: 1px solid rgba(255, 255, 255, 0.2);
+                ">
+                    <p style="
+                        font-size: 1.1rem; 
+                        opacity: 0.8;
+                        margin: 0;
+                    ">
+                        Closing in <span id="countdown" style="
+                            font-weight: bold;
+                            color: #4CAF50;
+                            font-size: 1.3rem;
+                        ">3</span> seconds...
+                    </p>
+                </div>
             </div>
         `;
         
         document.body.appendChild(farewellOverlay);
+        
+        // Add CSS animations for farewell screen
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes farewell-pulse {
+                0%, 100% { transform: scale(1); }
+                50% { transform: scale(1.05); }
+            }
+            @keyframes farewell-ripple {
+                0% { transform: scale(1); opacity: 0.3; }
+                100% { transform: scale(1.5); opacity: 0; }
+            }
+            @keyframes farewell-glow {
+                0%, 100% { text-shadow: 2px 2px 8px rgba(0,0,0,0.3); }
+                50% { text-shadow: 2px 2px 16px rgba(255,255,255,0.4), 0 0 30px rgba(255,255,255,0.3); }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        // Trigger entrance animations
+        setTimeout(() => {
+            farewellOverlay.style.opacity = '1';
+            const content = farewellOverlay.querySelector('.farewell-content');
+            content.style.transform = 'translateY(0)';
+            content.style.opacity = '1';
+        }, 100);
+        
+        // Countdown functionality
+        let countdown = 3;
+        const countdownElement = farewellOverlay.querySelector('#countdown');
+        const countdownInterval = setInterval(() => {
+            countdown--;
+            if (countdownElement) {
+                countdownElement.textContent = countdown;
+                // Add pulse effect on countdown change
+                countdownElement.style.transform = 'scale(1.2)';
+                setTimeout(() => {
+                    countdownElement.style.transform = 'scale(1)';
+                }, 150);
+            }
+            if (countdown <= 0) {
+                clearInterval(countdownInterval);
+            }
+        }, 1000);
         
         // Auto-close after 3 seconds or allow manual close
         setTimeout(() => {
