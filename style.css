@@ -379,6 +379,18 @@ body {
     transform: translateY(-3px);
 }
 
+.quit-game-btn {
+    background: rgba(255, 107, 107, 0.1);
+    color: white;
+    border: 2px solid rgba(255, 107, 107, 0.5);
+}
+
+.quit-game-btn:hover {
+    background: rgba(255, 107, 107, 0.2);
+    border-color: rgba(255, 107, 107, 0.7);
+    transform: translateY(-3px);
+}
+
 .game-features {
     display: flex;
     justify-content: center;
@@ -464,7 +476,13 @@ body {
     margin-bottom: 20px;
 }
 
-.back-btn {
+.game-nav-buttons {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.back-btn, .quit-btn {
     background: rgba(255, 255, 255, 0.1);
     border: 2px solid rgba(255, 255, 255, 0.3);
     color: white;
@@ -476,11 +494,22 @@ body {
     gap: 8px;
     transition: all 0.3s ease;
     backdrop-filter: blur(10px);
+    font-size: 0.9rem;
 }
 
 .back-btn:hover {
     background: rgba(255, 255, 255, 0.2);
     transform: translateX(-5px);
+}
+
+.quit-btn {
+    border-color: rgba(255, 107, 107, 0.5);
+}
+
+.quit-btn:hover {
+    background: rgba(255, 107, 107, 0.2);
+    border-color: rgba(255, 107, 107, 0.7);
+    transform: translateY(-2px);
 }
 
 .game-header {
@@ -948,6 +977,90 @@ body {
     transform: translateY(-2px);
 }
 
+/* Quit Confirmation Modal */
+.quit-confirmation-content {
+    max-width: 400px;
+    text-align: center;
+}
+
+.quit-icon {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #ff6b6b 0%, #ff5252 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.quit-icon svg {
+    width: 30px;
+    height: 30px;
+    stroke: white;
+    stroke-width: 2;
+}
+
+.quit-confirmation-content h2 {
+    color: #333;
+    margin-bottom: 15px;
+    font-size: 1.8rem;
+}
+
+.quit-confirmation-content p {
+    color: #666;
+    margin-bottom: 30px;
+    font-size: 1.1rem;
+    line-height: 1.5;
+}
+
+.quit-actions {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.confirm-quit-btn, .cancel-quit-btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 25px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    min-width: 120px;
+    justify-content: center;
+}
+
+.confirm-quit-btn {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ff5252 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+}
+
+.confirm-quit-btn:hover {
+    background: linear-gradient(135deg, #ff5252 0%, #f44336 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+}
+
+.cancel-quit-btn {
+    background: rgba(0, 0, 0, 0.05);
+    color: #666;
+    border: 2px solid rgba(0, 0, 0, 0.1);
+}
+
+.cancel-quit-btn:hover {
+    background: rgba(0, 0, 0, 0.1);
+    color: #333;
+    transform: translateY(-2px);
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     /* Start Screen Responsive */
@@ -984,6 +1097,16 @@ body {
         flex-direction: column;
         gap: 15px;
         text-align: center;
+    }
+    
+    .game-nav-buttons {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    
+    .back-btn, .quit-btn {
+        padding: 8px 16px;
+        font-size: 0.85rem;
     }
     
     .game-board {

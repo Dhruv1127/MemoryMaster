@@ -42,6 +42,11 @@ class MemoryGame {
         this.howToPlayModal = document.getElementById('how-to-play-modal');
         this.closeHelpBtn = document.getElementById('close-help-btn');
         this.gotItBtn = document.getElementById('got-it-btn');
+        this.quitGameBtn = document.getElementById('quit-game-btn');
+        this.quitGameplayBtn = document.getElementById('quit-game-gameplay-btn');
+        this.quitConfirmationModal = document.getElementById('quit-confirmation-modal');
+        this.confirmQuitBtn = document.getElementById('confirm-quit-btn');
+        this.cancelQuitBtn = document.getElementById('cancel-quit-btn');
 
         this.init();
     }
@@ -166,6 +171,16 @@ class MemoryGame {
             this.showHowToPlayModal();
         });
 
+        // Quit game button (from start screen)
+        this.quitGameBtn.addEventListener('click', () => {
+            this.showQuitConfirmation();
+        });
+
+        // Quit game button (from gameplay)
+        this.quitGameplayBtn.addEventListener('click', () => {
+            this.showQuitConfirmation();
+        });
+
         // Back to menu button
         this.backBtn.addEventListener('click', () => {
             this.showStartScreen();
@@ -187,6 +202,22 @@ class MemoryGame {
                 this.hideHowToPlayModal();
             }
         });
+
+        // Quit confirmation modal events
+        this.confirmQuitBtn.addEventListener('click', () => {
+            this.confirmQuit();
+        });
+
+        this.cancelQuitBtn.addEventListener('click', () => {
+            this.hideQuitConfirmation();
+        });
+
+        // Close quit modal on background click
+        this.quitConfirmationModal.addEventListener('click', (e) => {
+            if (e.target === this.quitConfirmationModal) {
+                this.hideQuitConfirmation();
+            }
+        });
     }
 
     showHowToPlayModal() {
@@ -196,6 +227,123 @@ class MemoryGame {
 
     hideHowToPlayModal() {
         this.howToPlayModal.classList.add('hidden');
+    }
+
+    showQuitConfirmation() {
+        this.quitConfirmationModal.classList.remove('hidden');
+        feather.replace();
+    }
+
+    hideQuitConfirmation() {
+        this.quitConfirmationModal.classList.add('hidden');
+    }
+
+    confirmQuit() {
+        // Hide the confirmation modal
+        this.hideQuitConfirmation();
+        
+        // Reset the game
+        this.resetGame();
+        
+        // Show a farewell message and close the tab/window
+        this.showFarewellMessage();
+    }
+
+    showFarewellMessage() {
+        // Create a farewell overlay
+        const farewellOverlay = document.createElement('div');
+        farewellOverlay.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            animation: fadeIn 0.5s ease-in-out;
+        `;
+        
+        farewellOverlay.innerHTML = `
+            <div style="text-align: center; color: white; animation: slideInUp 0.8s ease-out;">
+                <div style="font-size: 4rem; margin-bottom: 20px;">👋</div>
+                <h1 style="font-size: 2.5rem; margin-bottom: 20px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">
+                    Thanks for Playing!
+                </h1>
+                <p style="font-size: 1.2rem; opacity: 0.9; margin-bottom: 30px;">
+                    Hope you enjoyed the Memory Master game
+                </p>
+                <p style="font-size: 1rem; opacity: 0.7;">
+                    This window will close automatically in 3 seconds...
+                </p>
+            </div>
+        `;
+        
+        document.body.appendChild(farewellOverlay);
+        
+        // Auto-close after 3 seconds or allow manual close
+        setTimeout(() => {
+            try {
+                // Try to close the window/tab
+                window.close();
+                
+                // If window.close() doesn't work (in some browsers), show close instruction
+                if (!window.closed) {
+                    farewellOverlay.innerHTML = `
+                        <div style="text-align: center; color: white;">
+                            <div style="font-size: 4rem; margin-bottom: 20px;">🎯</div>
+                            <h1 style="font-size: 2.5rem; margin-bottom: 20px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">
+                                Game Ended
+                            </h1>
+                            <p style="font-size: 1.2rem; opacity: 0.9; margin-bottom: 30px;">
+                                You can safely close this tab or refresh to play again
+                            </p>
+                            <button onclick="location.reload()" style="
+                                background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+                                color: white;
+                                border: none;
+                                padding: 15px 30px;
+                                border-radius: 50px;
+                                font-size: 1.1rem;
+                                font-weight: bold;
+                                cursor: pointer;
+                                box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+                            ">
+                                Play Again
+                            </button>
+                        </div>
+                    `;
+                }
+            } catch (e) {
+                // If there's an error, just show the play again option
+                farewellOverlay.innerHTML = `
+                    <div style="text-align: center; color: white;">
+                        <div style="font-size: 4rem; margin-bottom: 20px;">🎯</div>
+                        <h1 style="font-size: 2.5rem; margin-bottom: 20px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">
+                            Game Ended
+                        </h1>
+                        <p style="font-size: 1.2rem; opacity: 0.9; margin-bottom: 30px;">
+                            You can safely close this tab or refresh to play again
+                        </p>
+                        <button onclick="location.reload()" style="
+                            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+                            color: white;
+                            border: none;
+                            padding: 15px 30px;
+                            border-radius: 50px;
+                            font-size: 1.1rem;
+                            font-weight: bold;
+                            cursor: pointer;
+                            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+                        ">
+                            Play Again
+                        </button>
+                    </div>
+                `;
+            }
+        }, 3000);
     }
 
     bindGameEvents() {
@@ -451,14 +599,49 @@ document.addEventListener('keydown', (e) => {
     if (e.key === 'r' || e.key === 'R') {
         // Restart game with 'R' key
         const restartBtn = document.getElementById('restart-btn');
-        if (restartBtn) {
+        if (restartBtn && !document.getElementById('game-screen').classList.contains('hidden')) {
             restartBtn.click();
         }
     } else if (e.key === 'Escape') {
-        // Close victory modal with Escape key
+        // Close modals with Escape key
         const victoryModal = document.getElementById('victory-modal');
+        const howToPlayModal = document.getElementById('how-to-play-modal');
+        const quitModal = document.getElementById('quit-confirmation-modal');
+        
         if (victoryModal && !victoryModal.classList.contains('hidden')) {
             victoryModal.classList.add('hidden');
+        } else if (howToPlayModal && !howToPlayModal.classList.contains('hidden')) {
+            howToPlayModal.classList.add('hidden');
+        } else if (quitModal && !quitModal.classList.contains('hidden')) {
+            quitModal.classList.add('hidden');
+        }
+    } else if (e.key === 'q' || e.key === 'Q') {
+        // Quit game with 'Q' key
+        const startScreen = document.getElementById('start-screen');
+        const gameScreen = document.getElementById('game-screen');
+        
+        if (!startScreen.classList.contains('hidden') || !gameScreen.classList.contains('hidden')) {
+            const quitModal = document.getElementById('quit-confirmation-modal');
+            if (quitModal && quitModal.classList.contains('hidden')) {
+                // Only show quit modal if no other modals are open
+                const victoryModal = document.getElementById('victory-modal');
+                const howToPlayModal = document.getElementById('how-to-play-modal');
+                
+                if ((!victoryModal || victoryModal.classList.contains('hidden')) && 
+                    (!howToPlayModal || howToPlayModal.classList.contains('hidden'))) {
+                    quitModal.classList.remove('hidden');
+                    feather.replace();
+                }
+            }
+        }
+    } else if (e.key === 'h' || e.key === 'H') {
+        // Show how to play with 'H' key (only on start screen)
+        const startScreen = document.getElementById('start-screen');
+        if (!startScreen.classList.contains('hidden')) {
+            const howToPlayBtn = document.getElementById('how-to-play-btn');
+            if (howToPlayBtn) {
+                howToPlayBtn.click();
+            }
         }
     }
 });

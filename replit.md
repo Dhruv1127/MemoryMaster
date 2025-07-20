@@ -35,11 +35,13 @@ Preferred communication style: Simple, everyday language.
   - Tutorial modal system
 
 ### User Interface (`index.html`)
-- **Start Screen**: Welcome screen with game logo, difficulty selection, and how-to-play instructions
-- **Game Header**: Title, statistics display, restart button, and back-to-menu navigation
+- **Start Screen**: Welcome screen with game logo, difficulty selection, how-to-play instructions, and quit option
+- **Game Header**: Title, statistics display, restart button, back-to-menu navigation, and quit option
 - **Game Board**: Dynamic grid layout that adapts to difficulty (4x4, 4x5, 5x6)
 - **Victory Modal**: Popup displaying final game statistics
 - **How-to-Play Modal**: Interactive tutorial with step-by-step instructions
+- **Quit Confirmation Modal**: Safety confirmation before ending game session
+- **Farewell Screen**: Graceful game ending with thank you message
 - **Responsive Layout**: Adaptive design for different screen sizes
 
 ### Styling (`style.css`)
